@@ -2,7 +2,7 @@
 import numpy as np
 from sklearn.linear_model import Ridge
 
-from . import config
+from app import config
 
 MAX_DAYS = 999.0
 

@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app import chat
+
 from . import config, services
 from .repository import get_repo
 from .routers import dispatch, network, phcs, voice
@@ -25,7 +27,7 @@ app.include_router(network.router)
 app.include_router(voice.router)
 app.include_router(dispatch.router)
 app.include_router(phcs.router)
-
+app.include_router(chat.router)
 
 @app.get("/api/health")
 def health():

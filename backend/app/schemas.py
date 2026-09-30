@@ -1,7 +1,7 @@
 """Pydantic v2 models matching the API contract exactly."""
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 Status = Literal["CRITICAL", "WARNING", "GREEN"]
 
@@ -113,3 +113,56 @@ class NearbyPhc(BaseModel):
     doctors_present: int
     doctors_total: int
     maps_url: str
+
+# ---------------- Chat ----------------
+Availability = Literal["IN_STOCK", "LOW", "OUT"]
+
+
+class ChatTurn(BaseModel):
+    role: Literal["user", "assistant"]
+    text: str = Field(max_length=2000)
+
+
+class LatLng(BaseModel):
+    lat: float = Field(ge=-90, le=90)
+    lng: float = Field(ge=-180, le=180)
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=1000)
+    history: list[ChatTurn] = Field(default_factory=list)
+    location: LatLng | None = None
+    district_hint: str | None = Field(default=None, max_length=60)
+
+    @field_validator("history")
+    @classmethod
+    def keep_last_10(cls, v: list[ChatTurn]) -> list[ChatTurn]:
+        return v[-10:]  # truncate instead of rejecting
+
+
+class MedicineAvailability(BaseModel):
+    name: str
+    availability: Availability
+
+
+class PhcCard(BaseModel):
+    type: Literal["phc"] = "phc"
+    phc_id: str
+    name: str
+    district: str
+    distance_km: float | None = None
+    beds_available: int
+    beds_total: int
+    doctors_present: int
+    doctors_total: int
+    maps_url: str
+    medicines: list[MedicineAvailability] = Field(default_factory=list)
+
+
+class ChatResponse(BaseModel):
+    reply: str
+    emergency: bool = False
+    source: Literal["gemini", "mock"]
+    data_as_of: str  # ISO 8601 UTC
+    cards: list[PhcCard] = Field(default_factory=list)
+    suggestions: list[str] = Field(default_factory=list)

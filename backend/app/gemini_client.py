@@ -2,7 +2,7 @@
 import json
 import re
 
-from . import config
+from app import config
 
 _client = None
 
