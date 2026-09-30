@@ -3,6 +3,12 @@
 Federated health-resource and supply-chain platform for India's Primary Health Centres (PHCs). Built for the Smart Health track.
 
 > **All numbers in this project are synthetic demo data.** Facility names and districts are real; beds, doctors, stock and footfall are invented. Coordinates are approximate.
+Federated health-resource and supply-chain platform...
+
+## 🚀 Live Demo
+
+**Try HealthGrid AI / CareFinder:**  
+👉 https://arundhathi-nayak.github.io/care-finder/
 
 ## What it does
 
