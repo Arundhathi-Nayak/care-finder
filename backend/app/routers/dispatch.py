@@ -1,4 +1,6 @@
 """POST /api/v1/recommend-redistribution. Quantity is ALWAYS computed in code."""
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from .. import config, gemini_client, geo, services
@@ -6,6 +8,7 @@ from ..repository import Repository, get_repo
 from ..schemas import Brief, RedistributionRequest, RedistributionResponse
 
 router = APIRouter(prefix="/api/v1", tags=["dispatch"])
+log = logging.getLogger(__name__)
 
 SYSTEM = (
     "You are a logistics assistant for a District Medical Officer in India. Using ONLY the facts provided, "
@@ -92,13 +95,16 @@ def recommend(req: RedistributionRequest, repo: Repository = Depends(get_repo)):
             }
             source = "gemini"
         except Exception as exc:
+            log.warning("gemini failed: %s code=%s msg=%s", type(exc).__name__,
+                        getattr(exc, "code", ""), getattr(exc, "message", ""))
+            code = getattr(exc, "code", "")
             reason = f"Gemini failed: {type(exc).__name__}"
     else:
         reason = "GEMINI_API_KEY not set"
     if brief is None:
         brief = mock_brief(facts)
     brief["transfer_quantity"] = qty  # code ALWAYS overrides the LLM
-
-    repo.add_transfer(facts["item"], src["phc_id"], tgt["phc_id"], qty, brief, source)
+    if not req.preview:
+     repo.add_transfer(facts["item"], src["phc_id"], tgt["phc_id"], qty, brief, source)
     return RedistributionResponse(source=source, fallback_reason=reason if source == "mock" else None,
                                   facts=facts, brief=Brief(**brief))

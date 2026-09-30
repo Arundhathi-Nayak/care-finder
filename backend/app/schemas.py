@@ -72,6 +72,7 @@ class RedistributionRequest(BaseModel):
     source_phc_id: str
     target_phc_id: str
     item_name: str
+    preview: bool = False
 
 
 class Brief(BaseModel):

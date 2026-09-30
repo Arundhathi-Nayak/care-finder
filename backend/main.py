@@ -20,7 +20,7 @@ from sklearn.linear_model import Ridge
 # --------------------------------------------------------------------------
 # 1. CONFIG + GEMINI CLIENT (graceful fallback when key / SDK is missing)
 # --------------------------------------------------------------------------
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")  # override e.g. gemini-2.5-flash
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")  
 API_KEY = os.getenv("GEMINI_API_KEY")
 gemini_client, genai_types = None, None
 if API_KEY:

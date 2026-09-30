@@ -60,7 +60,7 @@ def _client() -> genai.Client:
     key = config.gemini_api_key()
     if not key:
         raise RuntimeError("no GEMINI_API_KEY")
-    return genai.Client(api_key=key, http_options=types.HttpOptions(timeout=15_000))  # ms
+    return genai.Client(api_key=key, http_options=types.HttpOptions(timeout=60_000))  # ms
 
 
 def _contents(req: ChatRequest) -> list[types.Content]:
