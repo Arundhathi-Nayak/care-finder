@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sklearn.linear_model import Ridge
@@ -163,6 +164,17 @@ def safe_transfer_qty(source_id: str, target_id: str, medicine: str) -> int:
 # 4. API
 # --------------------------------------------------------------------------
 app = FastAPI(title="HealthGrid AI", version="1.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://arundhathi-nayak.github.io",
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class VoiceReport(BaseModel):
