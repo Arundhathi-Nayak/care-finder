@@ -1,0 +1,13 @@
+phc_id,phc_name,district,state,lat,lng,beds_available,beds_total,doctors_present,doctors_total
+PHC001,Hebri PHC,Udupi,Karnataka,13.4756,74.9836,6,10,1,2
+PHC002,Karkala CHC,Udupi,Karnataka,13.2144,74.9917,14,30,3,5
+PHC003,Brahmavar PHC,Udupi,Karnataka,13.2383,74.7448,4,10,0,2
+PHC004,Shirva PHC,Udupi,Karnataka,13.25,74.79,5,8,1,2
+PHC005,Kota PHC,Udupi,Karnataka,13.4833,74.7167,8,12,2,3
+PHC006,Byndoor PHC,Udupi,Karnataka,13.87,74.63,2,10,0,2
+PHC007,Paud PHC,Pune,Maharashtra,18.5167,73.5833,5,10,1,2
+PHC008,Bhor PHC,Pune,Maharashtra,18.15,73.85,9,20,2,4
+PHC009,Velhe PHC,Pune,Maharashtra,18.2833,73.6167,3,6,0,1
+PHC010,Saswad PHC,Pune,Maharashtra,18.35,74.0333,12,24,3,4
+PHC011,Pirangut PHC,Pune,Maharashtra,18.51,73.69,6,10,2,2
+PHC012,Jejuri PHC,Pune,Maharashtra,18.28,74.16,4,10,1,2

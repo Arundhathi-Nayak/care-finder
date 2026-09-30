@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+firebase-admin
+google-genai
+pandas
+numpy
+scikit-learn
+python-dotenv
+pytest
+httpx
