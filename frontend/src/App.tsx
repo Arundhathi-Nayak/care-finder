@@ -24,7 +24,7 @@ export default function App() {
             <li className="nav-item"><NavLink className={linkClass} to="/care-finder">Care Finder</NavLink></li>
             <li className="nav-item"><NavLink className={linkClass} to="/admin">Admin</NavLink></li>
           </ul>
-          <span className="badge text-bg-warning">Demo data</span>
+          <span className="badge text-bg-warning">Demo data (Source: data.gov.in)</span>
         </div>
       </nav>
       <main className="container py-3">
