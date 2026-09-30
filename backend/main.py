@@ -9,7 +9,7 @@ import re
 import threading
 from pathlib import Path
 
-from backend.app.schemas import ChatRequest, ChatResponse
+from app.schemas import ChatRequest, ChatResponse
 import numpy as np
 import pandas as pd
 import uvicorn
