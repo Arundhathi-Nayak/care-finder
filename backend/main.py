@@ -9,6 +9,7 @@ import re
 import threading
 from pathlib import Path
 
+from backend.app.schemas import ChatRequest, ChatResponse
 import numpy as np
 import pandas as pd
 import uvicorn
@@ -219,7 +220,64 @@ def network_status():
             "phcs": phcs,
         }
 
+# ---- AI chat ------------------------------------------------------------
 
+CHAT_SYSTEM = (
+    "You are HealthGrid AI, an assistant for healthcare resource and supply "
+    "management across Primary Health Centres (PHCs) in India. "
+    "Answer clearly and concisely. Use only information provided in the prompt "
+    "when discussing the current network. Do not invent stock, patient, bed, "
+    "or medical facility data."
+)
+
+
+@app.post("/api/v1/chat", response_model=ChatResponse)
+def chat(req: ChatRequest):
+    message = req.message.strip()
+
+    if not message:
+        raise HTTPException(400, "Message cannot be empty")
+
+    # Build current network context
+    with LOCK:
+        network = {
+            "phcs": DB["phc"].to_dict(orient="records"),
+            "transfers": TRANSFERS,
+        }
+
+    try:
+        reply_data = gemini_json(
+            CHAT_SYSTEM,
+            "Current network data:\n"
+            + json.dumps(network, default=str)
+            + "\n\nUser question:\n"
+            + message,
+        )
+
+        if isinstance(reply_data, dict):
+            reply = (
+                reply_data.get("reply")
+                or reply_data.get("response")
+                or reply_data.get("answer")
+            )
+
+            if reply:
+                return ChatResponse(reply=str(reply))
+
+        return ChatResponse(reply=str(reply_data))
+
+    except Exception as exc:
+        print(f"[HealthGrid] Chat fallback: {exc}")
+
+        return ChatResponse(
+            reply=(
+                "I can help with PHC stock levels, supply risks, "
+                "redistribution, beds, and network status. "
+                f"You asked: {message}"
+            )
+        )
+
+    
 # ---- voice report -------------------------------------------------------
 _DIGITS = str.maketrans("०१२३४५६७८९೦೧೨೩೪೫೬೭೮೯", "01234567890123456789")
 _PATIENT_KW = re.compile(r"मरीज|patient|ರೋಗಿ|ರೋಗಿಗಳು", re.I)
